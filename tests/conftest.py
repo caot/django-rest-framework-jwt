@@ -40,13 +40,15 @@ def pytest_configure():
         PASSWORD_HASHERS=(
             'django.contrib.auth.hashers.MD5PasswordHasher',
         ),
+#         AUTH_USER_MODEL='tests.CustomUser'
     )
 
+    import logging
     try:
         import oauth_provider  # NOQA
         import oauth2  # NOQA
-    except ImportError:
-        pass
+    except ImportError as e:
+        logging.error(e)
     else:
         settings.INSTALLED_APPS += (
             'oauth_provider',
@@ -57,8 +59,8 @@ def pytest_configure():
             # django-oauth2-provider does not support Django1.8
             raise ImportError
         import provider  # NOQA
-    except ImportError:
-        pass
+    except ImportError as e:
+        logging.error(e)
     else:
         settings.INSTALLED_APPS += (
             'provider',
@@ -68,5 +70,8 @@ def pytest_configure():
     try:
         import django
         django.setup()
-    except AttributeError:
-        pass
+    except AttributeError as e:
+        logging.error(e)
+
+    from django.core.management import call_command
+    call_command('syncdb', interactive=False)
