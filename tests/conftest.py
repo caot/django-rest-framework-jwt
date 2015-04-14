@@ -10,6 +10,7 @@ def pytest_configure():
                 'NAME': ':memory:'
             }
         },
+        ALLOWED_HOSTS=['testserver', ],
         SITE_ID=1,
         SECRET_KEY='not very secret in tests',
         USE_I18N=True,
@@ -40,7 +41,6 @@ def pytest_configure():
         PASSWORD_HASHERS=(
             'django.contrib.auth.hashers.MD5PasswordHasher',
         ),
-#         AUTH_USER_MODEL='tests.CustomUser'
     )
 
     import logging
